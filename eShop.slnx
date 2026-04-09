@@ -5,18 +5,20 @@
     <Project Path="src/eShop.ServiceDefaults/eShop.ServiceDefaults.csproj" />
     <Project Path="src/EventBus/EventBus.csproj" />
     <Project Path="src/EventBusRabbitMQ/EventBusRabbitMQ.csproj" />
-    <Project Path="src/EventBusServiceBus/EventBusServiceBus.csproj" />
+    <Project Path="src/EventBusServiceBus/EventBusServiceBus.csproj">
+      <Build Solution="Debug|*" Project="false" />
+    </Project>
     <Project Path="src/Identity.API/Identity.API.csproj" />
     <Project Path="src/IntegrationEventLogEF/IntegrationEventLogEF.csproj" />
     <Project Path="src/Ordering.API/Ordering.API.csproj" />
-    <Project Path="src/OrderProcessor/OrderProcessor.csproj" />
     <Project Path="src/Ordering.Domain/Ordering.Domain.csproj" />
     <Project Path="src/Ordering.Infrastructure/Ordering.Infrastructure.csproj" />
+    <Project Path="src/OrderProcessor/OrderProcessor.csproj" />
     <Project Path="src/PaymentProcessor/PaymentProcessor.csproj" />
     <Project Path="src/WebApp/WebApp.csproj" />
+    <Project Path="src/WebAppComponents/WebAppComponents.csproj" />
     <Project Path="src/WebhookClient/WebhookClient.csproj" />
     <Project Path="src/Webhooks.API/Webhooks.API.csproj" />
-    <Project Path="src/WebAppComponents/WebAppComponents.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/Basket.UnitTests/Basket.UnitTests.csproj" />
@@ -24,6 +26,7 @@
   </Folder>
   <Folder Name="/Solution Items/">
     <File Path=".editorconfig" />
+    <File Path=".github/workflows/pr-validation.yml" />
     <File Path="Directory.Packages.props" />
     <File Path="NuGet.config" />
     <File Path="README.md" />
