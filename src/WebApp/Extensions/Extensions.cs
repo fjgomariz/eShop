@@ -5,8 +5,9 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server;
-using Microsoft.Extensions.AI;
 using Microsoft.IdentityModel.JsonWebTokens;
+using Microsoft.Extensions.Hosting;
+using Grpc.Net.ClientFactory;
 
 public static class Extensions
 {
@@ -17,8 +18,6 @@ public static class Extensions
         builder.AddRabbitMqEventBus("EventBus")
                .AddEventBusSubscriptions();
 
-        builder.Services.AddHttpForwarderWithServiceDiscovery();
-
         // Application services
         builder.Services.AddScoped<BasketState>();
         builder.Services.AddScoped<LogOutService>();
@@ -27,15 +26,19 @@ public static class Extensions
         builder.Services.AddSingleton<IProductImageUrlProvider, ProductImageUrlProvider>();
         builder.AddAIServices();
 
+        var basketApiUrl = builder.Configuration["Services:Basket"] ?? "http://localhost:5101";
+        var catalogApiUrl = builder.Configuration["Services:Catalog"] ?? "http://localhost:5102";
+        var orderingApiUrl = builder.Configuration["Services:Ordering"] ?? "http://localhost:5103";
+
         // HTTP and GRPC client registrations
-        builder.Services.AddGrpcClient<Basket.BasketClient>(o => o.Address = new("http://basket-api"))
+        builder.Services.AddGrpcClient<Basket.BasketClient>(o => o.Address = new(basketApiUrl))
             .AddAuthToken();
 
-        builder.Services.AddHttpClient<CatalogService>(o => o.BaseAddress = new("https+http://catalog-api"))
+        builder.Services.AddHttpClient<CatalogService>(o => o.BaseAddress = new(catalogApiUrl))
             .AddApiVersion(2.0)
             .AddAuthToken();
 
-        builder.Services.AddHttpClient<OrderingService>(o => o.BaseAddress = new("https+http://ordering-api"))
+        builder.Services.AddHttpClient<OrderingService>(o => o.BaseAddress = new(orderingApiUrl))
             .AddApiVersion(1.0)
             .AddAuthToken();
     }
@@ -93,19 +96,9 @@ public static class Extensions
 
     private static void AddAIServices(this IHostApplicationBuilder builder)
     {
-        ChatClientBuilder? chatClientBuilder = null;
-        if (builder.Configuration["OllamaEnabled"] is string ollamaEnabled && bool.Parse(ollamaEnabled))
-        {
-            chatClientBuilder = builder.AddOllamaApiClient("chat")
-                .AddChatClient();
-        }
-        else if (!string.IsNullOrWhiteSpace(builder.Configuration.GetConnectionString("chatModel")))
-        {
-            chatClientBuilder = builder.AddOpenAIClientFromConfiguration("chatModel")
-                .AddChatClient();
-        }
-
-        chatClientBuilder?.UseFunctionInvocation();
+        // AI services configuration - requires manual setup without Aspire
+        // To enable AI chat features, configure Ollama or Azure OpenAI services manually
+        // See Azure deployment documentation for details
     }
 
     public static async Task<string?> GetBuyerIdAsync(this AuthenticationStateProvider authenticationStateProvider)

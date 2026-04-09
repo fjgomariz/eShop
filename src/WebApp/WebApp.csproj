@@ -18,9 +18,9 @@
 
   <ItemGroup>
     <PackageReference Include="Asp.Versioning.Http.Client" />
-    <PackageReference Include="Aspire.Azure.AI.OpenAI" />
+    <PackageReference Include="Azure.AI.OpenAI" />
     <PackageReference Include="CommunityToolkit.Aspire.OllamaSharp" />
-    <PackageReference Include="Microsoft.Extensions.ServiceDiscovery.Yarp" />
+    <PackageReference Include="Yarp.ReverseProxy" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" />
     <PackageReference Include="Google.Protobuf" />
     <PackageReference Include="Grpc.Net.ClientFactory" />

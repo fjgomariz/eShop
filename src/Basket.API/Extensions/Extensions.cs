@@ -2,6 +2,7 @@
 using eShop.Basket.API.Repositories;
 using eShop.Basket.API.IntegrationEvents.EventHandling;
 using eShop.Basket.API.IntegrationEvents.EventHandling.Events;
+using StackExchange.Redis;
 
 namespace eShop.Basket.API.Extensions;
 
@@ -11,7 +12,13 @@ public static class Extensions
     {
         builder.AddDefaultAuthentication();
 
-        builder.AddRedisClient("redis");
+        // Add Redis
+        var redisConnection = builder.Configuration.GetConnectionString("Redis") ?? "localhost:6379";
+        builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
+        {
+            var configuration = ConfigurationOptions.Parse(redisConnection, true);
+            return ConnectionMultiplexer.Connect(configuration);
+        });
 
         builder.Services.AddSingleton<IBasketRepository, RedisBasketRepository>();
 

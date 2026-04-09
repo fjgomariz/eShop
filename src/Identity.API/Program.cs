@@ -4,7 +4,11 @@ builder.AddServiceDefaults();
 
 builder.Services.AddControllersWithViews();
 
-builder.AddNpgsqlDbContext<ApplicationDbContext>("identitydb");
+var connectionString = builder.Configuration.GetConnectionString("identitydb")
+    ?? throw new InvalidOperationException("Connection string 'identitydb' not found.");
+
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseNpgsql(connectionString));
 
 // Apply database migration automatically. Note that this approach is not
 // recommended for production scenarios. Consider generating SQL scripts from

@@ -7,7 +7,11 @@
         builder.AddRabbitMqEventBus("eventbus")
                .AddEventBusSubscriptions();
 
-        builder.AddNpgsqlDbContext<WebhooksContext>("webhooksdb");
+        var connectionString = builder.Configuration.GetConnectionString("webhooksdb")
+            ?? throw new InvalidOperationException("Connection string 'webhooksdb' not found.");
+
+        builder.Services.AddDbContext<WebhooksContext>(options =>
+            options.UseNpgsql(connectionString));
 
         builder.Services.AddMigration<WebhooksContext>();
 

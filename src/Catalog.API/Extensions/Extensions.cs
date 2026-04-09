@@ -1,4 +1,6 @@
 ﻿using eShop.Catalog.API.Services;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 
 public static class Extensions
 {
@@ -12,11 +14,14 @@ public static class Extensions
             return;
         }
 
-        builder.AddNpgsqlDbContext<CatalogContext>("catalogdb", configureDbContextOptions: dbContextOptionsBuilder =>
+        var connectionString = builder.Configuration.GetConnectionString("catalogdb") 
+            ?? throw new InvalidOperationException("Connection string 'catalogdb' not found.");
+
+        builder.Services.AddDbContext<CatalogContext>(options =>
         {
-            dbContextOptionsBuilder.UseNpgsql(builder =>
+            options.UseNpgsql(connectionString, npgsqlOptions =>
             {
-                builder.UseVector();
+                npgsqlOptions.UseVector();
             });
         });
 
@@ -35,16 +40,9 @@ public static class Extensions
         builder.Services.AddOptions<CatalogOptions>()
             .BindConfiguration(nameof(CatalogOptions));
 
-        if (builder.Configuration["OllamaEnabled"] is string ollamaEnabled && bool.Parse(ollamaEnabled))
-        {
-            builder.AddOllamaApiClient("embedding")
-                .AddEmbeddingGenerator();
-        }
-        else if (!string.IsNullOrWhiteSpace(builder.Configuration.GetConnectionString("textEmbeddingModel")))
-        {
-            builder.AddOpenAIClientFromConfiguration("textEmbeddingModel")
-                .AddEmbeddingGenerator();
-        }
+        // AI services configuration - requires manual setup without Aspire
+        // To enable AI features, configure Ollama or Azure OpenAI services manually
+        // See Azure deployment documentation for details
 
         builder.Services.AddScoped<ICatalogAI, CatalogAI>();
     }

@@ -1,5 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 using eShop.OrderProcessor.Events;
+using Npgsql;
+using Microsoft.Extensions.Hosting;
 
 namespace eShop.OrderProcessor.Extensions;
 
@@ -10,7 +12,14 @@ public static class Extensions
         builder.AddRabbitMqEventBus("eventbus")
                .ConfigureJsonOptions(options => options.TypeInfoResolverChain.Add(IntegrationEventContext.Default));
 
-        builder.AddNpgsqlDataSource("orderingdb");
+        var connectionString = builder.Configuration.GetConnectionString("orderingdb")
+            ?? throw new InvalidOperationException("Connection string 'orderingdb' not found.");
+
+        builder.Services.AddSingleton<NpgsqlDataSource>(sp =>
+        {
+            var dataSourceBuilder = new NpgsqlDataSourceBuilder(connectionString);
+            return dataSourceBuilder.Build();
+        });
 
         builder.Services.AddOptions<BackgroundTaskOptions>()
             .BindConfiguration(nameof(BackgroundTaskOptions));

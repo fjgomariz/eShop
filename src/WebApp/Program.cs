@@ -29,6 +29,7 @@ app.UseStaticFiles();
 
 app.MapRazorComponents<App>().AddInteractiveServerRenderMode();
 
-app.MapForwarder("/product-images/{id}", "https+http://catalog-api", "/api/catalog/items/{id}/pic");
+var catalogApiUrl = app.Configuration["Services:Catalog"] ?? "http://localhost:5102";
+app.MapForwarder("/product-images/{id}", catalogApiUrl, "/api/catalog/items/{id}/pic");
 
 app.Run();

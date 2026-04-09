@@ -15,8 +15,10 @@ public static class Extensions
         builder.Services.AddOptions<WebhookClientOptions>().BindConfiguration(nameof(WebhookClientOptions));
         builder.Services.AddSingleton<HooksRepository>();
 
+        var webhooksApiUrl = builder.Configuration["Services:Webhooks"] ?? "http://localhost:5113";
+
         // HTTP client registrations
-        builder.Services.AddHttpClient<WebhooksClient>(o => o.BaseAddress = new("http://webhooks-api"))
+        builder.Services.AddHttpClient<WebhooksClient>(o => o.BaseAddress = new(webhooksApiUrl))
             .AddApiVersion(1.0)
             .AddAuthToken();
     }

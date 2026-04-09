@@ -5,7 +5,7 @@
     <PublishAot Condition="'$(EnableAotPublishing)' == 'true'">true</PublishAot>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Aspire.StackExchange.Redis" />
+    <PackageReference Include="StackExchange.Redis" />
     <PackageReference Include="Grpc.AspNetCore" />
   </ItemGroup>
 
