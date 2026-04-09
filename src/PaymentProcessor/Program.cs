@@ -2,8 +2,11 @@
 
 builder.AddServiceDefaults();
 
-builder.AddRabbitMqEventBus("EventBus")
-    .AddSubscription<OrderStatusChangedToStockConfirmedIntegrationEvent, OrderStatusChangedToStockConfirmedIntegrationEventHandler>();
+var eventBusConnectionString = builder.Configuration.GetConnectionString("EventBus") ?? "";
+var eventBus = eventBusConnectionString.StartsWith("Endpoint=sb://", StringComparison.OrdinalIgnoreCase)
+    ? builder.AddServiceBusEventBus("EventBus")
+    : builder.AddRabbitMqEventBus("EventBus");
+eventBus.AddSubscription<OrderStatusChangedToStockConfirmedIntegrationEvent, OrderStatusChangedToStockConfirmedIntegrationEventHandler>();
 
 builder.Services.AddOptions<PaymentOptions>()
     .BindConfiguration(nameof(PaymentOptions));

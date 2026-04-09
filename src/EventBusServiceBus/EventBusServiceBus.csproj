@@ -4,7 +4,6 @@
     <TargetFramework>net10.0</TargetFramework>
     <RootNamespace>eShop.EventBusServiceBus</RootNamespace>
     <IsAotCompatible>true</IsAotCompatible>
-    <EnableConfigurationBindingGenerator>true</EnableConfigurationBindingGenerator>
   </PropertyGroup>
 
   <ItemGroup>

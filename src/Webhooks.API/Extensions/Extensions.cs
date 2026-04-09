@@ -4,8 +4,11 @@
     {
         builder.AddDefaultAuthentication();
 
-        builder.AddRabbitMqEventBus("eventbus")
-               .AddEventBusSubscriptions();
+        var eventBusConnectionString = builder.Configuration.GetConnectionString("eventbus") ?? "";
+        var eventBus = eventBusConnectionString.StartsWith("Endpoint=sb://", StringComparison.OrdinalIgnoreCase)
+            ? builder.AddServiceBusEventBus("eventbus")
+            : builder.AddRabbitMqEventBus("eventbus");
+        eventBus.AddEventBusSubscriptions();
 
         var connectionString = builder.Configuration.GetConnectionString("webhooksdb")
             ?? throw new InvalidOperationException("Connection string 'webhooksdb' not found.");

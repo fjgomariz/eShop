@@ -1,5 +1,5 @@
+using System.Diagnostics.CodeAnalysis;
 using Azure.Messaging.ServiceBus;
-using eShop.EventBus;
 using eShop.EventBusServiceBus;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,8 +18,12 @@ public static class ServiceBusDependencyInjectionExtensions
 
     /// <summary>
     /// Adds Azure Service Bus as the event bus implementation.
-    /// The connection string is read from <c>ConnectionStrings:EventBus</c>.
+    /// The connection string is read from <c>ConnectionStrings:{connectionName}</c>.
     /// </summary>
+    [UnconditionalSuppressMessage("Trimming", "IL2026:RequiresUnreferencedCode",
+        Justification = "EventBusOptions only has simple string/int properties; no referenced-code risk.")]
+    [UnconditionalSuppressMessage("AOT", "IL3050:RequiresDynamicCode",
+        Justification = "Azure App Service uses JIT; AOT is not a target for this deployment.")]
     public static IEventBusBuilder AddServiceBusEventBus(this IHostApplicationBuilder builder, string connectionName)
     {
         ArgumentNullException.ThrowIfNull(builder);

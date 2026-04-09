@@ -15,8 +15,11 @@ public static class Extensions
     {
         builder.AddAuthenticationServices();
 
-        builder.AddRabbitMqEventBus("EventBus")
-               .AddEventBusSubscriptions();
+        var eventBusConnectionString = builder.Configuration.GetConnectionString("EventBus") ?? "";
+        var eventBus = eventBusConnectionString.StartsWith("Endpoint=sb://", StringComparison.OrdinalIgnoreCase)
+            ? builder.AddServiceBusEventBus("EventBus")
+            : builder.AddRabbitMqEventBus("EventBus");
+        eventBus.AddEventBusSubscriptions();
 
         // Application services
         builder.Services.AddScoped<BasketState>();

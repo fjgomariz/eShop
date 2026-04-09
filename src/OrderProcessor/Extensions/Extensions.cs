@@ -9,8 +9,11 @@ public static class Extensions
 {
     public static void AddApplicationServices(this IHostApplicationBuilder builder)
     {
-        builder.AddRabbitMqEventBus("eventbus")
-               .ConfigureJsonOptions(options => options.TypeInfoResolverChain.Add(IntegrationEventContext.Default));
+        var eventBusConnectionString = builder.Configuration.GetConnectionString("eventbus") ?? "";
+        var eventBusBuilder = eventBusConnectionString.StartsWith("Endpoint=sb://", StringComparison.OrdinalIgnoreCase)
+            ? builder.AddServiceBusEventBus("eventbus")
+            : builder.AddRabbitMqEventBus("eventbus");
+        eventBusBuilder.ConfigureJsonOptions(options => options.TypeInfoResolverChain.Add(IntegrationEventContext.Default));
 
         var connectionString = builder.Configuration.GetConnectionString("orderingdb")
             ?? throw new InvalidOperationException("Connection string 'orderingdb' not found.");

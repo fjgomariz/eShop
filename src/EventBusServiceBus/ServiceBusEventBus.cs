@@ -1,7 +1,6 @@
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using Azure.Messaging.ServiceBus;
-using eShop.EventBus;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
@@ -190,7 +189,7 @@ public sealed class ServiceBusEventBus(
         }
     }
 
-    private static void SetActivityTags(Activity? activity, string topicName, string operation)
+    private static void SetActivityTags(Activity activity, string topicName, string operation)
     {
         if (activity is not null)
         {
