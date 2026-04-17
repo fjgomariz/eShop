@@ -22,8 +22,11 @@ public static class Extensions
 
         builder.Services.AddSingleton<IBasketRepository, RedisBasketRepository>();
 
-        builder.AddRabbitMqEventBus("eventbus")
-               .AddSubscription<OrderStartedIntegrationEvent, OrderStartedIntegrationEventHandler>()
+        var eventBusConnectionString = builder.Configuration.GetConnectionString("eventbus") ?? "";
+        var eventBus = eventBusConnectionString.StartsWith("Endpoint=sb://", StringComparison.OrdinalIgnoreCase)
+            ? builder.AddServiceBusEventBus("eventbus")
+            : builder.AddRabbitMqEventBus("eventbus");
+        eventBus.AddSubscription<OrderStartedIntegrationEvent, OrderStartedIntegrationEventHandler>()
                .ConfigureJsonOptions(options => options.TypeInfoResolverChain.Add(IntegrationEventContext.Default));
     }
 }

@@ -27,8 +27,11 @@ internal static class Extensions
 
         services.AddTransient<IOrderingIntegrationEventService, OrderingIntegrationEventService>();
 
-        builder.AddRabbitMqEventBus("eventbus")
-               .AddEventBusSubscriptions();
+        var eventBusConnectionString = builder.Configuration.GetConnectionString("eventbus") ?? "";
+        var eventBus = eventBusConnectionString.StartsWith("Endpoint=sb://", StringComparison.OrdinalIgnoreCase)
+            ? builder.AddServiceBusEventBus("eventbus")
+            : builder.AddRabbitMqEventBus("eventbus");
+        eventBus.AddEventBusSubscriptions();
 
         services.AddHttpContextAccessor();
         services.AddTransient<IIdentityService, IdentityService>();

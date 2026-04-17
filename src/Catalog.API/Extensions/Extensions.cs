@@ -33,8 +33,11 @@ public static class Extensions
 
         builder.Services.AddTransient<ICatalogIntegrationEventService, CatalogIntegrationEventService>();
 
-        builder.AddRabbitMqEventBus("eventbus")
-               .AddSubscription<OrderStatusChangedToAwaitingValidationIntegrationEvent, OrderStatusChangedToAwaitingValidationIntegrationEventHandler>()
+        var eventBusConnectionString = builder.Configuration.GetConnectionString("eventbus") ?? "";
+        var eventBus = eventBusConnectionString.StartsWith("Endpoint=sb://", StringComparison.OrdinalIgnoreCase)
+            ? builder.AddServiceBusEventBus("eventbus")
+            : builder.AddRabbitMqEventBus("eventbus");
+        eventBus.AddSubscription<OrderStatusChangedToAwaitingValidationIntegrationEvent, OrderStatusChangedToAwaitingValidationIntegrationEventHandler>()
                .AddSubscription<OrderStatusChangedToPaidIntegrationEvent, OrderStatusChangedToPaidIntegrationEventHandler>();
 
         builder.Services.AddOptions<CatalogOptions>()
