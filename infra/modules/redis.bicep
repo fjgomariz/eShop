@@ -8,7 +8,7 @@ param namePrefix string
 param tags object = {}
 
 // Basic C1 (1 GB): cheaper option, no private connectivity
-resource redisCache 'Microsoft.Cache/redis@2024-03-01' = {
+resource redisCache 'Microsoft.Cache/redis@2024-11-01' = {
   name: '${namePrefix}-redis'
   location: location
   tags: tags

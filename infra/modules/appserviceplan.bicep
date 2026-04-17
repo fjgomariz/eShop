@@ -8,7 +8,7 @@ param namePrefix string
 param tags object = {}
 
 // B2 Linux plan: cost-effective for .NET workloads without private networking overhead
-resource appServicePlan 'Microsoft.Web/serverfarms@2023-12-01' = {
+resource appServicePlan 'Microsoft.Web/serverfarms@2025-03-01' = {
   name: '${namePrefix}-plan'
   location: location
   tags: tags

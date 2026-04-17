@@ -15,7 +15,7 @@ param administratorLoginPassword string
 param tags object = {}
 
 // Burstable B1ms: cheapest option for dev/test, no private connectivity needed
-resource postgresServer 'Microsoft.DBforPostgreSQL/flexibleServers@2023-12-01' = {
+resource postgresServer 'Microsoft.DBforPostgreSQL/flexibleServers@2025-08-01' = {
   name: '${namePrefix}-postgres'
   location: location
   tags: tags
@@ -45,7 +45,7 @@ resource postgresServer 'Microsoft.DBforPostgreSQL/flexibleServers@2023-12-01' =
 }
 
 // Allow Azure services to access PostgreSQL
-resource allowAzureServices 'Microsoft.DBforPostgreSQL/flexibleServers/firewallRules@2023-12-01' = {
+resource allowAzureServices 'Microsoft.DBforPostgreSQL/flexibleServers/firewallRules@2025-08-01' = {
   parent: postgresServer
   name: 'AllowAllAzureServicesAndResourcesWithinAzureIps'
   properties: {
@@ -54,22 +54,22 @@ resource allowAzureServices 'Microsoft.DBforPostgreSQL/flexibleServers/firewallR
   }
 }
 
-resource catalogDb 'Microsoft.DBforPostgreSQL/flexibleServers/databases@2023-12-01' = {
+resource catalogDb 'Microsoft.DBforPostgreSQL/flexibleServers/databases@2025-08-01' = {
   parent: postgresServer
   name: 'CatalogDB'
 }
 
-resource orderingDb 'Microsoft.DBforPostgreSQL/flexibleServers/databases@2023-12-01' = {
+resource orderingDb 'Microsoft.DBforPostgreSQL/flexibleServers/databases@2025-08-01' = {
   parent: postgresServer
   name: 'OrderingDB'
 }
 
-resource identityDb 'Microsoft.DBforPostgreSQL/flexibleServers/databases@2023-12-01' = {
+resource identityDb 'Microsoft.DBforPostgreSQL/flexibleServers/databases@2025-08-01' = {
   parent: postgresServer
   name: 'IdentityDB'
 }
 
-resource webhooksDb 'Microsoft.DBforPostgreSQL/flexibleServers/databases@2023-12-01' = {
+resource webhooksDb 'Microsoft.DBforPostgreSQL/flexibleServers/databases@2025-08-01' = {
   parent: postgresServer
   name: 'WebhooksDB'
 }

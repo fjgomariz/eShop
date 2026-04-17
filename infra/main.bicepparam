@@ -9,13 +9,13 @@ using './main.bicep'
 //     --parameters infra/main.bicepparam \
 //     --parameters postgresAdminPassword=$POSTGRES_ADMIN_PASSWORD
 
-param postgresAdminPassword = readEnvironmentVariable('POSTGRES_ADMIN_PASSWORD')
+param postgresAdminPassword = 'Corp123!'
 
 // ─── Optional overrides ───────────────────────────────────────────────────────
 
-param namePrefix = 'eshop'
+param namePrefix = 'eshop-frgom'
 
-param location = 'eastus'
+param location = 'swedencentral'
 
 param postgresAdminUser = 'eshopadmin'
 

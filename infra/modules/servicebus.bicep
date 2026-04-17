@@ -8,7 +8,7 @@ param namePrefix string
 param tags object = {}
 
 // Standard SKU: required for topics (pub/sub pattern), no premium needed for no private connectivity
-resource serviceBusNamespace 'Microsoft.ServiceBus/namespaces@2022-10-01-preview' = {
+resource serviceBusNamespace 'Microsoft.ServiceBus/namespaces@2024-01-01' = {
   name: '${namePrefix}-servicebus'
   location: location
   tags: tags
@@ -36,7 +36,7 @@ var topics = [
   'OrderPaymentSucceededIntegrationEvent'
 ]
 
-resource serviceBusTopics 'Microsoft.ServiceBus/namespaces/topics@2022-10-01-preview' = [for topic in topics: {
+resource serviceBusTopics 'Microsoft.ServiceBus/namespaces/topics@2024-01-01' = [for topic in topics: {
   parent: serviceBusNamespace
   name: topic
   properties: {
@@ -66,7 +66,7 @@ var subscriptions = [
   { topic: 'OrderStatusChangedToShippedIntegrationEvent', name: 'Webhooks' }
 ]
 
-resource serviceBusSubscriptions 'Microsoft.ServiceBus/namespaces/topics/subscriptions@2022-10-01-preview' = [for sub in subscriptions: {
+resource serviceBusSubscriptions 'Microsoft.ServiceBus/namespaces/topics/subscriptions@2024-01-01' = [for sub in subscriptions: {
   name: '${serviceBusNamespace.name}/${sub.topic}/${sub.name}'
   properties: {
     defaultMessageTimeToLive: 'P14D'
