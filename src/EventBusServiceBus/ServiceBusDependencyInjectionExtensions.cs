@@ -1,4 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
+using Azure.Core;
+using Azure.Identity;
 using Azure.Messaging.ServiceBus;
 using eShop.EventBusServiceBus;
 using Microsoft.Extensions.Configuration;
@@ -31,10 +33,24 @@ public static class ServiceBusDependencyInjectionExtensions
         var connectionString = builder.Configuration.GetConnectionString(connectionName)
             ?? throw new InvalidOperationException($"Connection string '{connectionName}' not found.");
 
-        builder.Services.AddSingleton(_ => new ServiceBusClient(connectionString, new ServiceBusClientOptions
+        // If the connection string has no SAS key, use Managed Identity (DefaultAzureCredential)
+        var connProps = ServiceBusConnectionStringProperties.Parse(connectionString);
+        if (string.IsNullOrEmpty(connProps.SharedAccessKey) && string.IsNullOrEmpty(connProps.SharedAccessSignature))
         {
-            TransportType = ServiceBusTransportType.AmqpTcp,
-        }));
+            builder.Services.AddSingleton<TokenCredential>(_ => new DefaultAzureCredential());
+            builder.Services.AddSingleton(sp =>
+                new ServiceBusClient(
+                    connProps.FullyQualifiedNamespace,
+                    sp.GetRequiredService<TokenCredential>(),
+                    new ServiceBusClientOptions { TransportType = ServiceBusTransportType.AmqpTcp }));
+        }
+        else
+        {
+            builder.Services.AddSingleton(_ => new ServiceBusClient(connectionString, new ServiceBusClientOptions
+            {
+                TransportType = ServiceBusTransportType.AmqpTcp,
+            }));
+        }
 
         builder.Services.Configure<EventBusOptions>(builder.Configuration.GetSection(SectionName));
 

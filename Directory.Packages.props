@@ -25,6 +25,7 @@
     <PackageVersion Include="Microsoft.Extensions.Configuration" Version="10.0.5" />
     <PackageVersion Include="Polly.Core" Version="8.4.2" />
     <!-- Non-Aspire alternatives for traditional Azure deployment -->
+    <PackageVersion Include="Azure.Identity" Version="1.21.0" />
     <PackageVersion Include="Azure.Messaging.ServiceBus" Version="7.20.1" />
     <PackageVersion Include="StackExchange.Redis" Version="2.11.0" />
     <PackageVersion Include="RabbitMQ.Client" Version="7.2.0" />
