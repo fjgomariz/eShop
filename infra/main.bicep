@@ -121,7 +121,7 @@ module catalogApi 'modules/appservice.bicep' = {
       }
       {
         name: 'ConnectionStrings__EventBus'
-        value: serviceBus.outputs.serviceBusConnectionString
+        value: serviceBus.outputs.serviceBusEndpoint
       }
       {
         name: 'EventBus__SubscriptionClientName'
@@ -146,7 +146,7 @@ module basketApi 'modules/appservice.bicep' = {
       }
       {
         name: 'ConnectionStrings__EventBus'
-        value: serviceBus.outputs.serviceBusConnectionString
+        value: serviceBus.outputs.serviceBusEndpoint
       }
       {
         name: 'EventBus__SubscriptionClientName'
@@ -175,7 +175,7 @@ module orderingApi 'modules/appservice.bicep' = {
       }
       {
         name: 'ConnectionStrings__EventBus'
-        value: serviceBus.outputs.serviceBusConnectionString
+        value: serviceBus.outputs.serviceBusEndpoint
       }
       {
         name: 'EventBus__SubscriptionClientName'
@@ -204,7 +204,7 @@ module webhooksApi 'modules/appservice.bicep' = {
       }
       {
         name: 'ConnectionStrings__EventBus'
-        value: serviceBus.outputs.serviceBusConnectionString
+        value: serviceBus.outputs.serviceBusEndpoint
       }
       {
         name: 'EventBus__SubscriptionClientName'
@@ -229,7 +229,7 @@ module webApp 'modules/appservice.bicep' = {
     appSettings: concat(commonSettings, [
       {
         name: 'ConnectionStrings__EventBus'
-        value: serviceBus.outputs.serviceBusConnectionString
+        value: serviceBus.outputs.serviceBusEndpoint
       }
       {
         name: 'EventBus__SubscriptionClientName'
@@ -291,7 +291,7 @@ module orderProcessor 'modules/appservice.bicep' = {
       }
       {
         name: 'ConnectionStrings__EventBus'
-        value: serviceBus.outputs.serviceBusConnectionString
+        value: serviceBus.outputs.serviceBusEndpoint
       }
       {
         name: 'EventBus__SubscriptionClientName'
@@ -312,13 +312,73 @@ module paymentProcessor 'modules/appservice.bicep' = {
     appSettings: concat(commonSettings, [
       {
         name: 'ConnectionStrings__EventBus'
-        value: serviceBus.outputs.serviceBusConnectionString
+        value: serviceBus.outputs.serviceBusEndpoint
       }
       {
         name: 'EventBus__SubscriptionClientName'
         value: 'PaymentProcessor'
       }
     ])
+  }
+}
+
+// ─── Service Bus Role Assignments (Managed Identity) ─────────────────────────
+// Each app service that uses the event bus gets the Azure Service Bus Data Owner
+// role on the namespace so it can publish and consume messages via Managed Identity.
+
+module sbRoleCatalog 'modules/servicebus-roleassignment.bicep' = {
+  name: 'sbRole-catalog'
+  params: {
+    serviceBusNamespaceName: serviceBus.outputs.serviceBusNamespaceName
+    principalId: catalogApi.outputs.principalId
+  }
+}
+
+module sbRoleBasket 'modules/servicebus-roleassignment.bicep' = {
+  name: 'sbRole-basket'
+  params: {
+    serviceBusNamespaceName: serviceBus.outputs.serviceBusNamespaceName
+    principalId: basketApi.outputs.principalId
+  }
+}
+
+module sbRoleOrdering 'modules/servicebus-roleassignment.bicep' = {
+  name: 'sbRole-ordering'
+  params: {
+    serviceBusNamespaceName: serviceBus.outputs.serviceBusNamespaceName
+    principalId: orderingApi.outputs.principalId
+  }
+}
+
+module sbRoleWebhooks 'modules/servicebus-roleassignment.bicep' = {
+  name: 'sbRole-webhooks'
+  params: {
+    serviceBusNamespaceName: serviceBus.outputs.serviceBusNamespaceName
+    principalId: webhooksApi.outputs.principalId
+  }
+}
+
+module sbRoleWebApp 'modules/servicebus-roleassignment.bicep' = {
+  name: 'sbRole-webapp'
+  params: {
+    serviceBusNamespaceName: serviceBus.outputs.serviceBusNamespaceName
+    principalId: webApp.outputs.principalId
+  }
+}
+
+module sbRoleOrderProcessor 'modules/servicebus-roleassignment.bicep' = {
+  name: 'sbRole-orderprocessor'
+  params: {
+    serviceBusNamespaceName: serviceBus.outputs.serviceBusNamespaceName
+    principalId: orderProcessor.outputs.principalId
+  }
+}
+
+module sbRolePaymentProcessor 'modules/servicebus-roleassignment.bicep' = {
+  name: 'sbRole-paymentprocessor'
+  params: {
+    serviceBusNamespaceName: serviceBus.outputs.serviceBusNamespaceName
+    principalId: paymentProcessor.outputs.principalId
   }
 }
 
