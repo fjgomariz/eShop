@@ -19,6 +19,8 @@ resource serviceBusNamespace 'Microsoft.ServiceBus/namespaces@2024-01-01' = {
   properties: {
     // Public access - no private connectivity for cost optimization
     publicNetworkAccess: 'Enabled'
+    // Disable SAS authentication; require Managed Identity for all clients
+    disableLocalAuth: true
   }
 }
 
@@ -80,8 +82,5 @@ resource serviceBusSubscriptions 'Microsoft.ServiceBus/namespaces/topics/subscri
   ]
 }]
 
-var rootKey = listKeys('${serviceBusNamespace.id}/AuthorizationRules/RootManageSharedAccessKey', serviceBusNamespace.apiVersion)
-
 output serviceBusNamespaceName string = serviceBusNamespace.name
-output serviceBusEndpoint string = serviceBusNamespace.properties.serviceBusEndpoint
-output serviceBusConnectionString string = rootKey.primaryConnectionString
+output serviceBusEndpoint string = 'Endpoint=sb://${serviceBusNamespace.name}.servicebus.windows.net/'
