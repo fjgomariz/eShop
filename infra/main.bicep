@@ -248,8 +248,12 @@ module webApp 'modules/appservice.bicep' = {
         value: orderingApi.outputs.appServiceUrl
       }
       {
-        name: 'Identity__Url'
+        name: 'IdentityUrl'
         value: identityApi.outputs.appServiceUrl
+      }
+      {
+        name: 'CallBackUrl'
+        value: 'https://${namePrefix}-webapp.azurewebsites.net'
       }
     ])
   }
@@ -265,8 +269,12 @@ module webhookClient 'modules/appservice.bicep' = {
     tags: tags
     appSettings: concat(commonSettings, [
       {
-        name: 'Identity__Url'
+        name: 'IdentityUrl'
         value: identityApi.outputs.appServiceUrl
+      }
+      {
+        name: 'CallBackUrl'
+        value: 'https://${namePrefix}-webhookclient.azurewebsites.net'
       }
       {
         name: 'WebhooksApiUrl'
