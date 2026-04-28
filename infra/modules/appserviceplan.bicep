@@ -14,7 +14,7 @@ resource appServicePlan 'Microsoft.Web/serverfarms@2025-03-01' = {
   tags: tags
   kind: 'linux'
   sku: {
-    name: 'B2'
+    name: 'B3'
     tier: 'Basic'
     capacity: 1
   }

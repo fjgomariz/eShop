@@ -6,6 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.AddServiceDefaults();
 
 builder.Services.AddRazorComponents().AddInteractiveServerComponents();
+builder.Services.AddHttpForwarder();
 
 builder.AddApplicationServices();
 
