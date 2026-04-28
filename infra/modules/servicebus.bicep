@@ -29,6 +29,7 @@ var topics = [
   'OrderStartedIntegrationEvent'
   'OrderStatusChangedToAwaitingValidationIntegrationEvent'
   'OrderStatusChangedToPaidIntegrationEvent'
+  'OrderStatusChangedToPaidIntegrationEvent1'
   'OrderStatusChangedToStockConfirmedIntegrationEvent'
   'OrderStatusChangedToCancelledIntegrationEvent'
   'OrderStatusChangedToShippedIntegrationEvent'
@@ -61,9 +62,14 @@ var subscriptions = [
   { topic: 'UserCheckoutAcceptedIntegrationEvent', name: 'Ordering' }
   { topic: 'OrderPaymentFailedIntegrationEvent', name: 'OrderProcessor' }
   { topic: 'OrderPaymentSucceededIntegrationEvent', name: 'OrderProcessor' }
+  { topic: 'OrderPaymentFailedIntegrationEvent', name: 'Ordering' }
+  { topic: 'OrderPaymentSucceededIntegrationEvent', name: 'Ordering' }
   { topic: 'OrderStatusChangedToPaidIntegrationEvent', name: 'Catalog' }
+  { topic: 'OrderStatusChangedToPaidIntegrationEvent', name: 'Webhooks' }
+  { topic: 'OrderStatusChangedToPaidIntegrationEvent1', name: 'Webhooks' }
   { topic: 'OrderStatusChangedToStockConfirmedIntegrationEvent', name: 'PaymentProcessor' }
   { topic: 'OrderStatusChangedToAwaitingValidationIntegrationEvent', name: 'Catalog' }
+  { topic: 'ProductPriceChangedIntegrationEvent', name: 'Webhooks' }
   { topic: 'OrderStatusChangedToCancelledIntegrationEvent', name: 'Webhooks' }
   { topic: 'OrderStatusChangedToShippedIntegrationEvent', name: 'Webhooks' }
 ]
