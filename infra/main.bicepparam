@@ -13,7 +13,7 @@ param postgresAdminPassword = 'Corp123!'
 
 // ─── Optional overrides ───────────────────────────────────────────────────────
 
-param namePrefix = 'eshop-frgom'
+param namePrefix = 'eshopfjg'
 
 param location = 'swedencentral'
 

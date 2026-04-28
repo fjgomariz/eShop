@@ -20,13 +20,13 @@ resource postgresServer 'Microsoft.DBforPostgreSQL/flexibleServers@2025-08-01' =
   location: location
   tags: tags
   sku: {
-    name: 'Standard_B1ms'
+    name: 'Standard_B2s'
     tier: 'Burstable'
   }
   properties: {
     administratorLogin: administratorLogin
     administratorLoginPassword: administratorLoginPassword
-    version: '16'
+    version: '18'
     storage: {
       storageSizeGB: 32
     }
