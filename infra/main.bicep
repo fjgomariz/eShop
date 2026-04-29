@@ -102,6 +102,26 @@ module identityApi 'modules/appservice.bicep' = {
         name: 'ConnectionStrings__identitydb'
         value: postgres.outputs.identityDbConnectionString
       }
+      {
+        name: 'WebAppClient'
+        value: 'https://${namePrefix}-webapp.azurewebsites.net'
+      }
+      {
+        name: 'WebhooksWebClient'
+        value: 'https://${namePrefix}-webhookclient.azurewebsites.net'
+      }
+      {
+        name: 'BasketApiClient'
+        value: 'https://${namePrefix}-basket-api.azurewebsites.net'
+      }
+      {
+        name: 'OrderingApiClient'
+        value: 'https://${namePrefix}-ordering-api.azurewebsites.net'
+      }
+      {
+        name: 'WebhooksApiClient'
+        value: 'https://${namePrefix}-webhooks-api.azurewebsites.net'
+      }
     ])
   }
 }
