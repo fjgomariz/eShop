@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.42.1.51946",
-      "templateHash": "3922996785377859697"
+      "templateHash": "7149212771670755548"
     }
   },
   "parameters": {
@@ -176,7 +176,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.42.1.51946",
-              "templateHash": "9249446153296858730"
+              "templateHash": "11822513102009956053"
             }
           },
           "parameters": {
@@ -209,7 +209,7 @@
               "tags": "[parameters('tags')]",
               "kind": "linux",
               "sku": {
-                "name": "B2",
+                "name": "B3",
                 "tier": "Basic",
                 "capacity": 1
               },
@@ -260,7 +260,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.42.1.51946",
-              "templateHash": "7327987246681915990"
+              "templateHash": "2824196312063954033"
             }
           },
           "parameters": {
@@ -304,13 +304,13 @@
               "location": "[parameters('location')]",
               "tags": "[parameters('tags')]",
               "sku": {
-                "name": "Standard_B1ms",
+                "name": "Standard_B2s",
                 "tier": "Burstable"
               },
               "properties": {
                 "administratorLogin": "[parameters('administratorLogin')]",
                 "administratorLoginPassword": "[parameters('administratorLoginPassword')]",
-                "version": "16",
+                "version": "18",
                 "storage": {
                   "storageSizeGB": 32
                 },
@@ -521,7 +521,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.42.1.51946",
-              "templateHash": "1971561369919591093"
+              "templateHash": "17603888985225238733"
             }
           },
           "parameters": {
@@ -550,9 +550,11 @@
               "OrderStartedIntegrationEvent",
               "OrderStatusChangedToAwaitingValidationIntegrationEvent",
               "OrderStatusChangedToPaidIntegrationEvent",
+              "OrderStatusChangedToPaidIntegrationEvent1",
               "OrderStatusChangedToStockConfirmedIntegrationEvent",
               "OrderStatusChangedToCancelledIntegrationEvent",
               "OrderStatusChangedToShippedIntegrationEvent",
+              "OrderStatusChangedToSubmittedIntegrationEvent",
               "ProductPriceChangedIntegrationEvent",
               "UserCheckoutAcceptedIntegrationEvent",
               "OrderPaymentFailedIntegrationEvent",
@@ -600,8 +602,24 @@
                 "name": "OrderProcessor"
               },
               {
+                "topic": "OrderPaymentFailedIntegrationEvent",
+                "name": "Ordering"
+              },
+              {
+                "topic": "OrderPaymentSucceededIntegrationEvent",
+                "name": "Ordering"
+              },
+              {
                 "topic": "OrderStatusChangedToPaidIntegrationEvent",
                 "name": "Catalog"
+              },
+              {
+                "topic": "OrderStatusChangedToPaidIntegrationEvent",
+                "name": "Webhooks"
+              },
+              {
+                "topic": "OrderStatusChangedToPaidIntegrationEvent1",
+                "name": "Webhooks"
               },
               {
                 "topic": "OrderStatusChangedToStockConfirmedIntegrationEvent",
@@ -612,12 +630,40 @@
                 "name": "Catalog"
               },
               {
+                "topic": "ProductPriceChangedIntegrationEvent",
+                "name": "Webhooks"
+              },
+              {
                 "topic": "OrderStatusChangedToCancelledIntegrationEvent",
                 "name": "Webhooks"
               },
               {
                 "topic": "OrderStatusChangedToShippedIntegrationEvent",
                 "name": "Webhooks"
+              },
+              {
+                "topic": "OrderStatusChangedToAwaitingValidationIntegrationEvent",
+                "name": "Ordering.webapp"
+              },
+              {
+                "topic": "OrderStatusChangedToPaidIntegrationEvent",
+                "name": "Ordering.webapp"
+              },
+              {
+                "topic": "OrderStatusChangedToStockConfirmedIntegrationEvent",
+                "name": "Ordering.webapp"
+              },
+              {
+                "topic": "OrderStatusChangedToShippedIntegrationEvent",
+                "name": "Ordering.webapp"
+              },
+              {
+                "topic": "OrderStatusChangedToCancelledIntegrationEvent",
+                "name": "Ordering.webapp"
+              },
+              {
+                "topic": "OrderStatusChangedToSubmittedIntegrationEvent",
+                "name": "Ordering.webapp"
               }
             ]
           },
@@ -1319,7 +1365,7 @@
             "value": "[parameters('tags')]"
           },
           "appSettings": {
-            "value": "[concat(createArray(createObject('name', 'APPLICATIONINSIGHTS_CONNECTION_STRING', 'value', reference(resourceId('Microsoft.Resources/deployments', 'appInsights'), '2025-04-01').outputs.appInsightsConnectionString.value), createObject('name', 'ApplicationInsightsAgent_EXTENSION_VERSION', 'value', '~3'), createObject('name', 'ASPNETCORE_ENVIRONMENT', 'value', 'Production')), createArray(createObject('name', 'ConnectionStrings__EventBus', 'value', reference(resourceId('Microsoft.Resources/deployments', 'serviceBus'), '2025-04-01').outputs.serviceBusEndpoint.value), createObject('name', 'EventBus__SubscriptionClientName', 'value', 'Ordering.webapp'), createObject('name', 'Services__Basket', 'value', reference(resourceId('Microsoft.Resources/deployments', 'basketApi'), '2025-04-01').outputs.appServiceUrl.value), createObject('name', 'Services__Catalog', 'value', reference(resourceId('Microsoft.Resources/deployments', 'catalogApi'), '2025-04-01').outputs.appServiceUrl.value), createObject('name', 'Services__Ordering', 'value', reference(resourceId('Microsoft.Resources/deployments', 'orderingApi'), '2025-04-01').outputs.appServiceUrl.value), createObject('name', 'Identity__Url', 'value', reference(resourceId('Microsoft.Resources/deployments', 'identityApi'), '2025-04-01').outputs.appServiceUrl.value)))]"
+            "value": "[concat(createArray(createObject('name', 'APPLICATIONINSIGHTS_CONNECTION_STRING', 'value', reference(resourceId('Microsoft.Resources/deployments', 'appInsights'), '2025-04-01').outputs.appInsightsConnectionString.value), createObject('name', 'ApplicationInsightsAgent_EXTENSION_VERSION', 'value', '~3'), createObject('name', 'ASPNETCORE_ENVIRONMENT', 'value', 'Production')), createArray(createObject('name', 'ConnectionStrings__EventBus', 'value', reference(resourceId('Microsoft.Resources/deployments', 'serviceBus'), '2025-04-01').outputs.serviceBusEndpoint.value), createObject('name', 'EventBus__SubscriptionClientName', 'value', 'Ordering.webapp'), createObject('name', 'Services__Basket', 'value', reference(resourceId('Microsoft.Resources/deployments', 'basketApi'), '2025-04-01').outputs.appServiceUrl.value), createObject('name', 'Services__Catalog', 'value', reference(resourceId('Microsoft.Resources/deployments', 'catalogApi'), '2025-04-01').outputs.appServiceUrl.value), createObject('name', 'Services__Ordering', 'value', reference(resourceId('Microsoft.Resources/deployments', 'orderingApi'), '2025-04-01').outputs.appServiceUrl.value), createObject('name', 'IdentityUrl', 'value', reference(resourceId('Microsoft.Resources/deployments', 'identityApi'), '2025-04-01').outputs.appServiceUrl.value), createObject('name', 'CallBackUrl', 'value', format('https://{0}-webapp.azurewebsites.net', parameters('namePrefix')))))]"
           }
         },
         "template": {
@@ -1443,7 +1489,7 @@
             "value": "[parameters('tags')]"
           },
           "appSettings": {
-            "value": "[concat(createArray(createObject('name', 'APPLICATIONINSIGHTS_CONNECTION_STRING', 'value', reference(resourceId('Microsoft.Resources/deployments', 'appInsights'), '2025-04-01').outputs.appInsightsConnectionString.value), createObject('name', 'ApplicationInsightsAgent_EXTENSION_VERSION', 'value', '~3'), createObject('name', 'ASPNETCORE_ENVIRONMENT', 'value', 'Production')), createArray(createObject('name', 'Identity__Url', 'value', reference(resourceId('Microsoft.Resources/deployments', 'identityApi'), '2025-04-01').outputs.appServiceUrl.value), createObject('name', 'WebhooksApiUrl', 'value', reference(resourceId('Microsoft.Resources/deployments', 'webhooksApi'), '2025-04-01').outputs.appServiceUrl.value)))]"
+            "value": "[concat(createArray(createObject('name', 'APPLICATIONINSIGHTS_CONNECTION_STRING', 'value', reference(resourceId('Microsoft.Resources/deployments', 'appInsights'), '2025-04-01').outputs.appInsightsConnectionString.value), createObject('name', 'ApplicationInsightsAgent_EXTENSION_VERSION', 'value', '~3'), createObject('name', 'ASPNETCORE_ENVIRONMENT', 'value', 'Production')), createArray(createObject('name', 'IdentityUrl', 'value', reference(resourceId('Microsoft.Resources/deployments', 'identityApi'), '2025-04-01').outputs.appServiceUrl.value), createObject('name', 'CallBackUrl', 'value', format('https://{0}-webhookclient.azurewebsites.net', parameters('namePrefix'))), createObject('name', 'WebhooksApiUrl', 'value', reference(resourceId('Microsoft.Resources/deployments', 'webhooksApi'), '2025-04-01').outputs.appServiceUrl.value)))]"
           }
         },
         "template": {

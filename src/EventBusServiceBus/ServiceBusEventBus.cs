@@ -162,7 +162,16 @@ public sealed class ServiceBusEventBus(
 
     private Task OnProcessError(ProcessErrorEventArgs args)
     {
-        logger.LogError(args.Exception, "Service Bus error on {EntityPath}: {ErrorSource}", args.EntityPath, args.ErrorSource);
+        // Transient errors (e.g. idle receive timeouts when no messages are available) are expected
+        // and should not be treated as real errors.
+        if (args.Exception is ServiceBusException { IsTransient: true })
+        {
+            logger.LogDebug(args.Exception, "Transient Service Bus error on {EntityPath}: {ErrorSource}", args.EntityPath, args.ErrorSource);
+        }
+        else
+        {
+            logger.LogError(args.Exception, "Service Bus error on {EntityPath}: {ErrorSource}", args.EntityPath, args.ErrorSource);
+        }
         return Task.CompletedTask;
     }
 
