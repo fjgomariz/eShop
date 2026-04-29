@@ -1,6 +1,6 @@
 ﻿namespace eShop.WebApp.Services;
 
-public class OrderStatusNotificationService
+public class OrderStatusNotificationService(ILogger<OrderStatusNotificationService> logger)
 {
     // Locking manually because we need multiple values per key, and only need to lock very briefly
     private readonly object _subscriptionsLock = new();
@@ -26,11 +26,37 @@ public class OrderStatusNotificationService
 
     public Task NotifyOrderStatusChangedAsync(string buyerId)
     {
+        Subscription[] subscriptions;
         lock (_subscriptionsLock)
         {
-            return _subscriptionsByBuyerId.TryGetValue(buyerId, out var subscriptions)
-                ? Task.WhenAll(subscriptions.Select(s => s.NotifyAsync()))
-                : Task.CompletedTask;
+            if (!_subscriptionsByBuyerId.TryGetValue(buyerId, out var subs))
+            {
+                return Task.CompletedTask;
+            }
+            // Copy under the lock so we don't invoke callbacks while holding it
+            subscriptions = [.. subs];
+        }
+
+        // Fire-and-forget: the Service Bus event handler must not wait for all UI
+        // subscribers to finish before the message is acknowledged, otherwise slow
+        // or disconnected Blazor circuits will cause receive-lock timeouts.
+        foreach (var subscription in subscriptions)
+        {
+            _ = NotifySafeAsync(subscription);
+        }
+
+        return Task.CompletedTask;
+    }
+
+    private async Task NotifySafeAsync(Subscription subscription)
+    {
+        try
+        {
+            await subscription.NotifyAsync();
+        }
+        catch (Exception ex)
+        {
+            logger.LogWarning(ex, "Error notifying order status change subscriber");
         }
     }
 
