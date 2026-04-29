@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.42.1.51946",
-      "templateHash": "7149212771670755548"
+      "templateHash": "13119896478611444865"
     }
   },
   "parameters": {
@@ -758,7 +758,7 @@
             "value": "[parameters('tags')]"
           },
           "appSettings": {
-            "value": "[concat(createArray(createObject('name', 'APPLICATIONINSIGHTS_CONNECTION_STRING', 'value', reference(resourceId('Microsoft.Resources/deployments', 'appInsights'), '2025-04-01').outputs.appInsightsConnectionString.value), createObject('name', 'ApplicationInsightsAgent_EXTENSION_VERSION', 'value', '~3'), createObject('name', 'ASPNETCORE_ENVIRONMENT', 'value', 'Production')), createArray(createObject('name', 'ConnectionStrings__identitydb', 'value', reference(resourceId('Microsoft.Resources/deployments', 'postgres'), '2025-04-01').outputs.identityDbConnectionString.value)))]"
+            "value": "[concat(createArray(createObject('name', 'APPLICATIONINSIGHTS_CONNECTION_STRING', 'value', reference(resourceId('Microsoft.Resources/deployments', 'appInsights'), '2025-04-01').outputs.appInsightsConnectionString.value), createObject('name', 'ApplicationInsightsAgent_EXTENSION_VERSION', 'value', '~3'), createObject('name', 'ASPNETCORE_ENVIRONMENT', 'value', 'Production')), createArray(createObject('name', 'ConnectionStrings__identitydb', 'value', reference(resourceId('Microsoft.Resources/deployments', 'postgres'), '2025-04-01').outputs.identityDbConnectionString.value), createObject('name', 'WebAppClient', 'value', format('https://{0}-webapp.azurewebsites.net', parameters('namePrefix'))), createObject('name', 'WebhooksWebClient', 'value', format('https://{0}-webhookclient.azurewebsites.net', parameters('namePrefix'))), createObject('name', 'BasketApiClient', 'value', format('https://{0}-basket-api.azurewebsites.net', parameters('namePrefix'))), createObject('name', 'OrderingApiClient', 'value', format('https://{0}-ordering-api.azurewebsites.net', parameters('namePrefix'))), createObject('name', 'WebhooksApiClient', 'value', format('https://{0}-webhooks-api.azurewebsites.net', parameters('namePrefix')))))]"
           }
         },
         "template": {
