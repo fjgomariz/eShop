@@ -33,6 +33,7 @@ var topics = [
   'OrderStatusChangedToStockConfirmedIntegrationEvent'
   'OrderStatusChangedToCancelledIntegrationEvent'
   'OrderStatusChangedToShippedIntegrationEvent'
+  'OrderStatusChangedToSubmittedIntegrationEvent'
   'ProductPriceChangedIntegrationEvent'
   'UserCheckoutAcceptedIntegrationEvent'
   'OrderPaymentFailedIntegrationEvent'
@@ -72,6 +73,12 @@ var subscriptions = [
   { topic: 'ProductPriceChangedIntegrationEvent', name: 'Webhooks' }
   { topic: 'OrderStatusChangedToCancelledIntegrationEvent', name: 'Webhooks' }
   { topic: 'OrderStatusChangedToShippedIntegrationEvent', name: 'Webhooks' }
+  { topic: 'OrderStatusChangedToAwaitingValidationIntegrationEvent', name: 'Ordering.webapp' }
+  { topic: 'OrderStatusChangedToPaidIntegrationEvent', name: 'Ordering.webapp' }
+  { topic: 'OrderStatusChangedToStockConfirmedIntegrationEvent', name: 'Ordering.webapp' }
+  { topic: 'OrderStatusChangedToShippedIntegrationEvent', name: 'Ordering.webapp' }
+  { topic: 'OrderStatusChangedToCancelledIntegrationEvent', name: 'Ordering.webapp' }
+  { topic: 'OrderStatusChangedToSubmittedIntegrationEvent', name: 'Ordering.webapp' }
 ]
 
 resource serviceBusSubscriptions 'Microsoft.ServiceBus/namespaces/topics/subscriptions@2024-01-01' = [for sub in subscriptions: {
